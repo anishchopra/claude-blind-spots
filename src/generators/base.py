@@ -8,6 +8,7 @@ import json
 
 from PIL import Image
 from pydantic import BaseModel
+from statsmodels.stats.proportion import proportion_confint
 
 
 @dataclass
@@ -39,20 +40,32 @@ class BaseGenerator(ABC):
 
     @classmethod
     def _compute_accuracy(cls, results: list[dict]) -> dict:
-        """Compute accuracy metrics. Shared helper for all generators.
+        """Compute accuracy metrics with 95% confidence interval.
 
         Each result dict should have 'ground_truth' and 'prediction' keys.
         Correctness is determined by exact equality.
+        Uses Wilson score interval for confidence interval calculation.
         """
         total_correct = sum(
             1 for r in results if r["prediction"] == r["ground_truth"]
         )
         total_samples = len(results)
         accuracy = total_correct / total_samples if total_samples > 0 else 0
+
+        # Compute 95% confidence interval using Wilson method
+        if total_samples > 0:
+            ci_low, ci_high = proportion_confint(
+                total_correct, total_samples, alpha=0.05, method="wilson"
+            )
+        else:
+            ci_low, ci_high = 0.0, 0.0
+
         return {
             "correct": total_correct,
             "total": total_samples,
             "accuracy": accuracy,
+            "accuracy_ci_low": ci_low,
+            "accuracy_ci_high": ci_high,
         }
 
     @classmethod
