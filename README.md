@@ -9,7 +9,6 @@ Characterizing and addressing visual perception limitations in Claude Haiku 4.5.
 │   ├── generators/         # Image generators for each task type
 │   ├── inference/          # Claude inference logic
 │   └── utils.py            # Shared utilities
-├── data/                   # Generated test data (by run name)
 ├── scripts/                # CLI entry points
 └── .claude/skills/         # Claude Code skills for this project
 ```
