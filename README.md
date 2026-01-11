@@ -2,6 +2,8 @@
 
 Characterizing and addressing visual perception limitations in Claude Haiku 4.5.
 
+You can find a detailed analysis of the results, along with a fine-tuning proposal, [here](<Claude Haiku Blind Spots Report.pdf>)
+
 ## Project Structure
 
 ```
